@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
-import { Card, Text, Title, Button, Stack, Box, Divider } from "@mantine/core";
+import { Text, Title, Button, Stack, Box, Divider } from "@mantine/core";
 import FlashCard from "../components/FlashCard";
+import FlashCardIcons from "../components/FlashCardIcons";
 import VOCAB, { PartOfSpeech, getMaxUnit } from "../vocab";
 import SourceSelector from "../components/SourceSelector";
 import PartOfSpeechSelector from "../components/PartOfSpeechSelector";
@@ -15,9 +16,6 @@ const shuffleInPlace = <T,>(array: T[]): T[] => {
   }
   return array;
 };
-
-
-
 
 const Index = () => {
   const [source, setSource] = useState<SourceSelectorState>({ mode: "all" });
@@ -60,15 +58,29 @@ const Index = () => {
   );
   const card = cardIndex < filteredVocab.length ? filteredVocab[cardIndex] : null;
 
+  const nextCard = () => {
+    setCardIndex(Math.min(cardIndex + 1, filteredVocab.length - 1));
+  };
+
+  const previousCard = () => {
+    setCardIndex(Math.max(cardIndex - 1, 0));
+  };
+
   return (
     <Stack justify="center" align="center" mt={40}>
       <Title order={1}>Welsh Flashcards</Title>
-      <Card shadow="sm" padding="lg" radius="md" withBorder style={{ minWidth: 350 }}>
-        <Title order={2} mb="md">
-          Welsh Word
-        </Title>
-        {card ? <FlashCard card={card} /> : <Text>No cards to display.</Text>}
-      </Card>
+      <FlashCardIcons
+        previousEnabled={cardIndex > 0}
+        nextEnabled={cardIndex < filteredVocab.length - 1}
+        onNext={nextCard}
+        onPrevious={previousCard}
+      />
+      {card ? <FlashCard card={card} /> : <Text>No cards to display.</Text>}
+      {filteredVocab.length > 0 && (
+        <Text align="center" size="sm" mt="xs">
+          {cardIndex + 1} / {filteredVocab.length}
+        </Text>
+      )}
       <Box w={400} mt={32}>
         <Divider my="sm" label="Options" labelPosition="center" />
         <Stack gap="md">

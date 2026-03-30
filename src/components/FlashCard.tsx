@@ -1,4 +1,4 @@
-import { Text } from "@mantine/core";
+import { Card, Text } from "@mantine/core";
 import type { VocabEntry } from "../vocab";
 import { Gender, PartOfSpeech } from "../vocab";
 
@@ -27,7 +27,7 @@ interface FlashCardProps {
 }
 
 const FlashCard = ({ card }: FlashCardProps) => (
-  <>
+  <Card shadow="sm" padding="lg" radius="md" withBorder style={{ minWidth: 350 }}>
     <Text>
       <strong>Welsh:</strong> {card.welsh}
       {card.welshPlural && ` (${card.welshPlural})`}
@@ -47,7 +47,7 @@ const FlashCard = ({ card }: FlashCardProps) => (
     <Text>
       <strong>Source:</strong> {card.source}
     </Text>
-  </>
+  </Card>
 );
 
 export default FlashCard;
