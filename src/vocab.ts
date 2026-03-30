@@ -16,6 +16,7 @@ export enum Gender {
 }
 
 export interface VocabEntry {
+  unit?: number;
   source: string;
   type: PartOfSpeech;
   gender?: Gender;
@@ -26,7 +27,7 @@ export interface VocabEntry {
 }
 
 // Map code to enum
-function mapPartOfSpeech(code: string): PartOfSpeech {
+const mapPartOfSpeech = (code: string): PartOfSpeech => {
   switch (code) {
     case "n":
       return PartOfSpeech.Noun;
@@ -39,9 +40,9 @@ function mapPartOfSpeech(code: string): PartOfSpeech {
     default:
       throw new Error(`Unknown part of speech code: ${code}`);
   }
-}
+};
 
-function mapGender(code: string): Gender | undefined {
+const mapGender = (code: string): Gender | undefined => {
   switch (code) {
     case "m":
       return Gender.Masculine;
@@ -52,23 +53,44 @@ function mapGender(code: string): Gender | undefined {
     default:
       throw new Error(`Unknown gender code: ${code}`);
   }
-}
+};
 
-// mynediadRaw is { fields: string[], data: any[][] }
+const parseUnit = (source: string): number | undefined => {
+  const match = /uned\s*(\d+)/i.exec(source);
+  if (match) {
+    return parseInt(match[1]);
+  }
+  return undefined;
+};
+
 const { fields, data } = mynediadRaw as { fields: string[]; data: (string | undefined)[][] };
 
-export const vocab: VocabEntry[] = data.map((row: (string | undefined)[]) => {
+export const VOCAB: VocabEntry[] = data.map((row: (string | undefined)[]) => {
   const obj: Record<string, string | undefined> = {};
   fields.forEach((field, i) => {
     obj[field] = row[i];
   });
   return {
-    source: obj.source,
+    unit: parseUnit(obj.source ?? ""),
+    source: obj.source ?? "",
     type: mapPartOfSpeech(obj.type ?? ""),
     gender: mapGender(obj.gender ?? ""),
-    welsh: obj.welsh,
+    welsh: obj.welsh ?? "",
     welshPlural: obj.welshPlural === "" ? undefined : obj.welshPlural,
-    english: obj.english,
+    english: obj.english ?? "",
     englishPlural: obj.englishPlural === "" ? undefined : obj.englishPlural,
   };
 });
+
+export default VOCAB;
+
+// Returns the highest unit number found in vocab sources.
+export const getMaxUnit = (): number | null => {
+  let max: number | null = null;
+  for (const { unit } of VOCAB) {
+    if (unit && (max === null || max < unit)) {
+      max = unit;
+    }
+  }
+  return max;
+};
