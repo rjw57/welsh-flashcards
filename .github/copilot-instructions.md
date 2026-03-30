@@ -45,9 +45,12 @@ Styling is handled by Mantine components and theming. Do not use `src/index.css`
 
 ### TypeScript
 
-- Full strict mode: `strict`, `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly`, `noUncheckedSideEffectImports`
+- Full strict mode: `strict`, `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly`,
+  `noUncheckedSideEffectImports`
 - Use `import type` for type-only imports (`verbatimModuleSyntax` is enabled and enforces this)
 - `noEmit: true` — Vite handles bundling, not tsc
+- **Always use `const foo = () => { ... }` arrow function style for all function declarations
+  (including components and helpers). Do not use `function foo() { ... }` style.**
 
 ### Code style (enforced by ESLint + pre-commit hooks)
 

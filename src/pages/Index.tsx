@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { Card, Text, Title, Button, Stack, Box, Divider } from "@mantine/core";
-import VOCAB, { PartOfSpeech, Gender, getMaxUnit } from "../vocab";
+import FlashCard from "../components/FlashCard";
+import VOCAB, { PartOfSpeech, getMaxUnit } from "../vocab";
 import SourceSelector from "../components/SourceSelector";
 import PartOfSpeechSelector from "../components/PartOfSpeechSelector";
 import type { SourceSelectorState } from "../components/SourceSelector";
@@ -15,27 +16,10 @@ const shuffleInPlace = <T,>(array: T[]): T[] => {
   return array;
 };
 
-const formatPartOfSpeech = (pos: PartOfSpeech) => {
-  switch (pos) {
-    case PartOfSpeech.Noun:
-      return "Noun";
-    case PartOfSpeech.Verb:
-      return "Verb";
-    case PartOfSpeech.Adjective:
-      return "Adjective";
-    case PartOfSpeech.Other:
-      return "Other";
-    default:
-      return pos;
-  }
-};
 
-const formatGender = (gender?: Gender) => {
-  if (!gender) return "";
-  return gender === Gender.Masculine ? "Masculine" : "Feminine";
-};
 
-export const Index = () => {
+
+const Index = () => {
   const [source, setSource] = useState<SourceSelectorState>({ mode: "all" });
   const [parts, setParts] = useState<PartOfSpeechSelectorState>({
     noun: true,
@@ -44,6 +28,7 @@ export const Index = () => {
     other: true,
   });
   const [effectiveState, setEffectiveState] = useState({ source, parts });
+  const [cardIndex, setCardIndex] = useState(0);
 
   const filteredVocab = useMemo(
     () =>
@@ -73,6 +58,7 @@ export const Index = () => {
       ),
     [effectiveState],
   );
+  const card = cardIndex < filteredVocab.length ? filteredVocab[cardIndex] : null;
 
   return (
     <Stack justify="center" align="center" mt={40}>
@@ -81,31 +67,7 @@ export const Index = () => {
         <Title order={2} mb="md">
           Welsh Word
         </Title>
-        {filteredVocab.length > 0 ? (
-          <>
-            <Text>
-              <strong>Welsh:</strong> {filteredVocab[0].welsh}
-              {filteredVocab[0].welshPlural && ` (${filteredVocab[0].welshPlural})`}
-            </Text>
-            <Text>
-              <strong>English:</strong> {filteredVocab[0].english}
-              {filteredVocab[0].englishPlural && ` (${filteredVocab[0].englishPlural})`}
-            </Text>
-            <Text>
-              <strong>Part of Speech:</strong> {formatPartOfSpeech(filteredVocab[0].type)}
-            </Text>
-            {filteredVocab[0].gender && (
-              <Text>
-                <strong>Gender:</strong> {formatGender(filteredVocab[0].gender)}
-              </Text>
-            )}
-            <Text>
-              <strong>Source:</strong> {filteredVocab[0].source}
-            </Text>
-          </>
-        ) : (
-          <Text>No cards to display.</Text>
-        )}
+        {card ? <FlashCard card={card} /> : <Text>No cards to display.</Text>}
       </Card>
       <Box w={400} mt={32}>
         <Divider my="sm" label="Options" labelPosition="center" />
@@ -116,6 +78,7 @@ export const Index = () => {
             mt="md"
             onClick={() => {
               setEffectiveState({ source, parts });
+              setCardIndex(0);
             }}
             variant="outline"
             color="teal"
