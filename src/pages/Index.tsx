@@ -18,6 +18,8 @@ const shuffleInPlace = <T,>(array: T[]): T[] => {
 };
 
 const Index = () => {
+  const [startFlipped, setStartFlipped] = useState(false);
+  const [cardFlipped, setCardFlipped] = useState(startFlipped);
   const [source, setSource] = useState<SourceSelectorState>({ mode: "all" });
   const [parts, setParts] = useState<PartOfSpeechSelectorState>({
     noun: true,
@@ -60,10 +62,12 @@ const Index = () => {
 
   const nextCard = () => {
     setCardIndex(Math.min(cardIndex + 1, filteredVocab.length - 1));
+    setCardFlipped(startFlipped);
   };
 
   const previousCard = () => {
     setCardIndex(Math.max(cardIndex - 1, 0));
+    setCardFlipped(startFlipped);
   };
 
   return (
@@ -75,7 +79,17 @@ const Index = () => {
         onNext={nextCard}
         onPrevious={previousCard}
       />
-      {card ? <FlashCard card={card} /> : <Text>No cards to display.</Text>}
+      {card ? (
+        <FlashCard
+          card={card}
+          flipped={cardFlipped}
+          onClick={() => {
+            setCardFlipped((f) => !f);
+          }}
+        />
+      ) : (
+        <Text>No cards to display.</Text>
+      )}
       {filteredVocab.length > 0 && (
         <Text align="center" size="sm" mt="xs">
           {cardIndex + 1} / {filteredVocab.length}
@@ -91,6 +105,7 @@ const Index = () => {
             onClick={() => {
               setEffectiveState({ source, parts });
               setCardIndex(0);
+              setStartFlipped(false);
             }}
             variant="outline"
             color="teal"
