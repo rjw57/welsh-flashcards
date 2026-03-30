@@ -91,7 +91,7 @@ const Index = () => {
         <Text>No cards to display.</Text>
       )}
       {filteredVocab.length > 0 && (
-        <Text align="center" size="sm" mt="xs">
+        <Text style={{ textAlign: "center" }} size="sm" mt="xs">
           {cardIndex + 1} / {filteredVocab.length}
         </Text>
       )}

@@ -100,9 +100,6 @@ const FlashCard = ({ card, flipped, ...divProps }: FlashCardProps) => {
             <Text span c="dimmed" size="sm" style={{ position: "absolute", top: 8, left: 12 }}>
               {formatPartOfSpeech(card.type)}
             </Text>
-            <Text span c="dimmed" size="sm" style={{ position: "absolute", top: 8, right: 12 }}>
-              {card.gender ? formatGender(card.gender) : ""}
-            </Text>
             <Text style={{ textAlign: "center" }} size="xl" mt="xl">
               {card.english}
             </Text>
