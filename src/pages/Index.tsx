@@ -64,12 +64,20 @@ const Index = () => {
     setCardIndex(Math.max(cardIndex - 1, 0));
   };
 
+  const cardToBack = () => {
+    setVocab([...vocab.slice(0, cardIndex), ...vocab.slice(cardIndex + 1), vocab[cardIndex]]);
+    setFlippedCardIdx(null);
+  };
+
   useKeydownHandler((event) => {
     if (event.key === "ArrowLeft") {
       previousCard();
     }
     if (event.key === "ArrowRight") {
       nextCard();
+    }
+    if (event.key === "ArrowUp") {
+      cardToBack();
     }
     if (event.key === " ") {
       toggleCard();
@@ -111,6 +119,8 @@ const Index = () => {
           Use <Kbd>&larr;</Kbd> and <Kbd>&rarr;</Kbd> to move through deck.
           <br />
           Use <Kbd>Space</Kbd> to flip the current card.
+          <br />
+          Use <Kbd>&uarr;</Kbd> to put card to back of deck.
         </Text>
         <OptionsPane
           options={options}
@@ -126,6 +136,7 @@ const Index = () => {
           disabled={!optionsUpdated}
           onClick={() => {
             const { startFlipped } = options;
+            setCardIndex(0);
             setStartFlipped(startFlipped);
             setVocab(getFilteredVocab(options));
             setOptionsUpdated(false);
