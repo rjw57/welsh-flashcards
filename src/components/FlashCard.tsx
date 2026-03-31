@@ -1,9 +1,9 @@
-import { Box, Card, Text, type BoxComponentProps } from "@mantine/core";
+import type { ComponentPropsWithoutRef } from "react";
+import { Box, Card, Group, Stack, Text, type BoxComponentProps } from "@mantine/core";
 import type { VocabEntry } from "../vocab";
 import { Gender, PartOfSpeech } from "../vocab";
 import styles from "./FlashCard.module.css";
 import hideStyles from "./FlashCardHide.module.css";
-import { useState } from "react";
 
 const formatPartOfSpeech = (pos: PartOfSpeech, lang: "en" | "cy" = "en") => {
   if (lang === "cy") {
@@ -44,86 +44,72 @@ const formatGender = (gender?: Gender, lang: "en" | "cy" = "en") => {
 
 type HideSide = "none" | "left" | "right";
 
-export interface FlashCardProps extends BoxComponentProps {
+export interface FlashCardProps {
   card: VocabEntry;
-  startFlipped?: boolean;
+  flipped?: boolean;
   hideSide?: HideSide;
 }
 
 export const FlashCard = ({
   card,
-  startFlipped = false,
+  flipped = false,
   hideSide = "none",
   ...props
-}: FlashCardProps) => {
-  const [flipped, setFlipped] = useState(startFlipped);
+}: FlashCardProps & BoxComponentProps & ComponentPropsWithoutRef<"div">) => {
   let hideClass = hideStyles.hideNone;
   if (hideSide === "left") hideClass = hideStyles.hideLeft;
   if (hideSide === "right") hideClass = hideStyles.hideRight;
 
   return (
     <Box className={styles.flipContainer + " " + hideClass} {...props}>
-      <Box
-        className={styles.flipper + (flipped ? " " + styles.flipped : "")}
-        onClick={() => {
-          setFlipped((f) => !f);
-        }}
-      >
+      <Box className={styles.flipper + (flipped ? " " + styles.flipped : "")}>
         <Box className={styles.front}>
-          <Card
-            shadow="sm"
-            padding="lg"
-            radius="md"
-            withBorder
-            style={{ position: "relative", minHeight: 180 }}
-          >
-            <Text span c="dimmed" size="sm" style={{ position: "absolute", top: 8, left: 12 }}>
-              {formatPartOfSpeech(card.type)}
-            </Text>
-            <Text style={{ textAlign: "center" }} size="xl" mt="xl">
-              {card.english}
-            </Text>
-            {card.englishPlural && (
-              <Text style={{ textAlign: "center" }} size="xl">
-                {card.englishPlural}
-              </Text>
-            )}
-            <Text span c="dimmed" size="sm" style={{ position: "absolute", bottom: 8, right: 12 }}>
-              {card.source}
-            </Text>
-            <Text span c="dimmed" size="sm" style={{ position: "absolute", bottom: 8, left: 12 }}>
-              English
-            </Text>
+          <Card shadow="sm" padding="lg" radius="md" withBorder p={0}>
+            <Stack align="stretch" justify="space-between" mih={180} p="xs">
+              <Group justify="space-between">
+                <Text span c="dimmed" size="sm">
+                  {formatPartOfSpeech(card.type)}
+                </Text>
+              </Group>
+              <Stack align="center" justify="center" gap={0}>
+                <Text size="xl">{card.english}</Text>
+                {card.englishPlural && <Text size="xl">{card.englishPlural}</Text>}
+              </Stack>
+              <Group justify="space-between">
+                <Text span c="dimmed" size="sm">
+                  English
+                </Text>
+                <Text span c="dimmed" size="sm">
+                  {card.source}
+                </Text>
+              </Group>
+            </Stack>
           </Card>
         </Box>
         <Box className={styles.back}>
-          <Card
-            shadow="sm"
-            padding="lg"
-            radius="md"
-            withBorder
-            style={{ position: "relative", minHeight: 180 }}
-          >
-            <Text span c="dimmed" size="sm" style={{ position: "absolute", top: 8, left: 12 }}>
-              {formatPartOfSpeech(card.type, "cy")}
-            </Text>
-            <Text span c="dimmed" size="sm" style={{ position: "absolute", top: 8, right: 12 }}>
-              {card.gender ? formatGender(card.gender, "cy") : ""}
-            </Text>
-            <Text style={{ textAlign: "center" }} mt="xl" size="xl">
-              {card.welsh}
-            </Text>
-            {card.welshPlural && (
-              <Text style={{ textAlign: "center" }} size="xl">
-                {card.welshPlural}
-              </Text>
-            )}
-            <Text span c="dimmed" size="sm" style={{ position: "absolute", bottom: 8, right: 12 }}>
-              {card.source}
-            </Text>
-            <Text span c="dimmed" size="sm" style={{ position: "absolute", bottom: 8, left: 12 }}>
-              Cymraeg
-            </Text>
+          <Card shadow="sm" padding="lg" radius="md" withBorder p={0}>
+            <Stack align="stretch" justify="space-between" mih={180} p="xs">
+              <Group justify="space-between">
+                <Text span c="dimmed" size="sm">
+                  {formatPartOfSpeech(card.type, "cy")}
+                </Text>
+                <Text span c="dimmed" size="sm">
+                  {formatGender(card.gender, "cy")}
+                </Text>
+              </Group>
+              <Stack align="center" justify="center" gap={0}>
+                <Text size="xl">{card.welsh}</Text>
+                {card.welshPlural && <Text size="xl">{card.welshPlural}</Text>}
+              </Stack>
+              <Group justify="space-between">
+                <Text span c="dimmed" size="sm">
+                  Cymraeg
+                </Text>
+                <Text span c="dimmed" size="sm">
+                  {card.source}
+                </Text>
+              </Group>
+            </Stack>
           </Card>
         </Box>
       </Box>

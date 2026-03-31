@@ -1,16 +1,16 @@
-import { Radio, NumberInput } from "@mantine/core";
+import { Radio, NumberInput, Group } from "@mantine/core";
 
 export type SourceSelectorState = { mode: "all" } | { mode: "upto"; unit: number };
 
 export interface SourceSelectorProps {
   state: SourceSelectorState;
   onUpdated: (state: SourceSelectorState) => void;
-  maxUnit: number;
+  maxUnit?: number;
 }
 
 export default function SourceSelector({ state, onUpdated, maxUnit }: SourceSelectorProps) {
   return (
-    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+    <Group justify="flex-start">
       <Radio
         label="All units"
         checked={state.mode === "all"}
@@ -40,6 +40,6 @@ export default function SourceSelector({ state, onUpdated, maxUnit }: SourceSele
         disabled={state.mode !== "upto"}
         style={{ width: 80 }}
       />
-    </div>
+    </Group>
   );
 }

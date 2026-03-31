@@ -1,4 +1,4 @@
-import { Checkbox } from "@mantine/core";
+import { Checkbox, Group } from "@mantine/core";
 
 export interface PartOfSpeechSelectorState {
   noun: boolean;
@@ -19,7 +19,7 @@ export default function PartOfSpeechSelector({ state, onUpdated }: PartOfSpeechS
   }
 
   return (
-    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+    <Group justify="flex-start">
       <Checkbox
         label="Nouns"
         checked={state.noun}
@@ -40,6 +40,6 @@ export default function PartOfSpeechSelector({ state, onUpdated }: PartOfSpeechS
         checked={state.other}
         onChange={e => { update("other", e.currentTarget.checked); }}
       />
-    </div>
+    </Group>
   );
 }

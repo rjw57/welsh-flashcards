@@ -479,18 +479,6 @@
     estraverse "^5.3.0"
     picomatch "^4.0.3"
 
-"@tabler/icons-react@^3.41.1":
-  version "3.41.1"
-  resolved "https://registry.yarnpkg.com/@tabler/icons-react/-/icons-react-3.41.1.tgz#e719ff95130eee0685e955a80ad71f5165641f38"
-  integrity sha512-kUgweE+DJtAlMZVIns1FTDdcbpRVnkK7ZpUOXmoxy3JAF0rSHj0TcP4VHF14+gMJGnF+psH2Zt26BLT6owetBA==
-  dependencies:
-    "@tabler/icons" "3.41.1"
-
-"@tabler/icons@3.41.1":
-  version "3.41.1"
-  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-3.41.1.tgz#dff9c77af287c73c2fcab4074cfa9f2069f9b7ee"
-  integrity sha512-OaRnVbRmH2nHtFeg+RmMJ/7m2oBIF9XCJAUD5gQnMrpK9f05ydj8MZrAf3NZQqOXyxGN1UBL0D5IKLLEUfr74Q==
-
 "@tybys/wasm-util@^0.10.1":
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/@tybys/wasm-util/-/wasm-util-0.10.1.tgz#ecddd3205cf1e2d5274649ff0eedd2991ed7f414"
