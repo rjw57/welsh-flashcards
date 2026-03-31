@@ -104,12 +104,13 @@ const Index = () => {
             );
           })}
         </Box>
-        <Text size="sm">
+        <Text size="lg">
           {cardIndex + 1} / {vocab.length}
         </Text>
-        <Text ta="center">
-          Use left and right arrow keys to move through deck. Use <Kbd>Space</Kbd> to flip the
-          current card.
+        <Text ta="center" c="dimmed">
+          Use <Kbd>&larr;</Kbd> and <Kbd>&rarr;</Kbd> to move through deck.
+          <br />
+          Use <Kbd>Space</Kbd> to flip the current card.
         </Text>
         <OptionsPane
           options={options}
