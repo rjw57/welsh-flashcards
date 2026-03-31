@@ -16,37 +16,41 @@ const shuffleInPlace = <T,>(array: T[]): T[] => {
 };
 
 const getFilteredVocab = ({ source, partOfSpeech }: Options) =>
-  shuffleInPlace(
-    VOCAB.filter((v) => {
-      if (!partOfSpeech.noun && v.type === PartOfSpeech.Noun) {
+  VOCAB.filter((v) => {
+    if (!partOfSpeech.noun && v.type === PartOfSpeech.Noun) {
+      return false;
+    }
+    if (!partOfSpeech.verb && v.type === PartOfSpeech.Verb) {
+      return false;
+    }
+    if (!partOfSpeech.adjective && v.type === PartOfSpeech.Adjective) {
+      return false;
+    }
+    if (!partOfSpeech.other && v.type === PartOfSpeech.Other) {
+      return false;
+    }
+    if (source.mode === "upto") {
+      if (typeof v.unit === "undefined") {
         return false;
       }
-      if (!partOfSpeech.verb && v.type === PartOfSpeech.Verb) {
-        return false;
-      }
-      if (!partOfSpeech.adjective && v.type === PartOfSpeech.Adjective) {
-        return false;
-      }
-      if (!partOfSpeech.other && v.type === PartOfSpeech.Other) {
-        return false;
-      }
-      if (source.mode === "upto") {
-        if (typeof v.unit === "undefined") {
-          return false;
-        }
-        return v.unit <= source.unit;
-      }
-      return true;
-    }),
-  );
+      return v.unit <= source.unit;
+    }
+    return true;
+  });
 
 const Index = () => {
   const [flippedCardIdx, setFlippedCardIdx] = useState<number | null>(null);
   const [cardIndex, setCardIndex] = useState(0);
   const [options, setOptions] = useState(DEFAULT_OPTIONS);
   const [optionsUpdated, setOptionsUpdated] = useState(false);
-  const [vocab, setVocab] = useState(() => getFilteredVocab(options));
+  const [vocab, setVocab] = useState(() => shuffleInPlace(getFilteredVocab(options)));
+  const [shouldShuffle, setShouldShuffle] = useState(false);
   const [startFlipped, setStartFlipped] = useState(false);
+
+  if (shouldShuffle) {
+    setVocab(shuffleInPlace(vocab));
+    setShouldShuffle(false);
+  }
 
   const toggleCard = () => {
     setFlippedCardIdx((idx) => (idx === cardIndex ? null : cardIndex));
@@ -121,6 +125,7 @@ const Index = () => {
             setStartFlipped(startFlipped);
             setVocab(getFilteredVocab(options));
             setOptionsUpdated(false);
+            setShouldShuffle(true);
           }}
         >
           Apply and shuffle
