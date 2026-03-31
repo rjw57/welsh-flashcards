@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, Title, Button, Stack, Box } from "@mantine/core";
+import { Text, Title, Button, Stack, Box, Kbd, Group } from "@mantine/core";
 import FlashCard from "../components/FlashCard";
 import VOCAB, { PartOfSpeech, getMaxUnit } from "../vocab";
 import OptionsPane from "../components/OptionsPane.tsx";
@@ -77,38 +77,40 @@ const Index = () => {
   });
 
   return (
-    <Stack align="center" mt="xl">
-      <Title>Welsh Flashcards</Title>
-      <Box w={350} h={180} pos="relative">
-        {[cardIndex - 1, cardIndex, cardIndex + 1].map((idx) => {
-          if (idx < 0 || idx >= vocab.length) {
-            return undefined;
-          }
-          const card = vocab[idx];
-          const hideSide = idx < cardIndex ? "left" : idx > cardIndex ? "right" : "none";
-          return (
-            <FlashCard
-              key={idx}
-              pos="absolute"
-              w="100%"
-              h="100%"
-              card={card}
-              hideSide={hideSide}
-              onClick={toggleCard}
-              flipped={
-                (startFlipped && idx !== flippedCardIdx) ||
-                (!startFlipped && idx === flippedCardIdx)
-              }
-            />
-          );
-        })}
-      </Box>
-      {vocab.length > 0 && (
+    <Group justify="center" mt="xl">
+      <Stack align="center" maw={380}>
+        <Title>Welsh Flashcards</Title>
+        <Box w="100%" h={180} pos="relative">
+          {[cardIndex - 1, cardIndex, cardIndex + 1].map((idx) => {
+            if (idx < 0 || idx >= vocab.length) {
+              return undefined;
+            }
+            const card = vocab[idx];
+            const hideSide = idx < cardIndex ? "left" : idx > cardIndex ? "right" : "none";
+            return (
+              <FlashCard
+                key={idx}
+                pos="absolute"
+                w="100%"
+                h="100%"
+                card={card}
+                hideSide={hideSide}
+                onClick={toggleCard}
+                flipped={
+                  (startFlipped && idx !== flippedCardIdx) ||
+                  (!startFlipped && idx === flippedCardIdx)
+                }
+              />
+            );
+          })}
+        </Box>
         <Text size="sm">
           {cardIndex + 1} / {vocab.length}
         </Text>
-      )}
-      <Stack>
+        <Text ta="center">
+          Use left and right arrow keys to move through deck. Use <Kbd>Space</Kbd> to flip the
+          current card.
+        </Text>
         <OptionsPane
           options={options}
           onChange={(newOptions) => {
@@ -118,6 +120,7 @@ const Index = () => {
           maxUnit={getMaxUnit() ?? undefined}
         />
         <Button
+          fullWidth
           variant="outline"
           disabled={!optionsUpdated}
           onClick={() => {
@@ -131,7 +134,7 @@ const Index = () => {
           Apply and shuffle
         </Button>
       </Stack>
-    </Stack>
+    </Group>
   );
 };
 
