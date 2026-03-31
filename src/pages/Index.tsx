@@ -36,7 +36,7 @@ const getFilteredVocab = ({ source, partOfSpeech }: Options) =>
       return v.unit <= source.unit;
     }
     return true;
-  });
+  }).map((v, i) => ({ key: i, ...v }));
 
 const Index = () => {
   const [flippedCardIdx, setFlippedCardIdx] = useState<number | null>(null);
@@ -97,7 +97,7 @@ const Index = () => {
             const hideSide = idx < cardIndex ? "left" : idx > cardIndex ? "right" : "none";
             return (
               <FlashCard
-                key={idx}
+                key={card.key}
                 pos="absolute"
                 w="100%"
                 h="100%"
