@@ -1,0 +1,20 @@
+.hideNone {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.6s cubic-bezier(0.4, 0.2, 0.2, 1),
+    transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.hideLeft {
+  opacity: 0;
+  transform: translateX(-120%) scale(0.95);
+  transition: opacity 0.6s cubic-bezier(0.4, 0.2, 0.2, 1),
+    transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.hideRight {
+  opacity: 0;
+  transform: translateX(120%) scale(0.95);
+  transition: opacity 0.6s cubic-bezier(0.4, 0.2, 0.2, 1),
+    transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+}

@@ -1,8 +1,9 @@
-import type { ComponentProps } from "react";
-import { Card, Text } from "@mantine/core";
+import { Box, Card, Text, type BoxComponentProps } from "@mantine/core";
 import type { VocabEntry } from "../vocab";
 import { Gender, PartOfSpeech } from "../vocab";
 import styles from "./FlashCard.module.css";
+import hideStyles from "./FlashCardHide.module.css";
+import { useState } from "react";
 
 const formatPartOfSpeech = (pos: PartOfSpeech, lang: "en" | "cy" = "en") => {
   if (lang === "cy") {
@@ -41,25 +42,61 @@ const formatGender = (gender?: Gender, lang: "en" | "cy" = "en") => {
   return gender === Gender.Masculine ? "Masculine" : "Feminine";
 };
 
-interface FlashCardProps extends ComponentProps<"div"> {
+type HideSide = "none" | "left" | "right";
+
+export interface FlashCardProps extends BoxComponentProps {
   card: VocabEntry;
-  flipped?: boolean;
+  startFlipped?: boolean;
+  hideSide?: HideSide;
 }
 
-const FlashCard = ({ card, flipped, ...divProps }: FlashCardProps) => {
+export const FlashCard = ({
+  card,
+  startFlipped = false,
+  hideSide = "none",
+  ...props
+}: FlashCardProps) => {
+  const [flipped, setFlipped] = useState(startFlipped);
+  let hideClass = hideStyles.hideNone;
+  if (hideSide === "left") hideClass = hideStyles.hideLeft;
+  if (hideSide === "right") hideClass = hideStyles.hideRight;
+
   return (
-    <div
-      className={styles.flipContainer}
-      tabIndex={0}
-      role="button"
-      style={{ minWidth: 350, outline: "none" }}
-      {...divProps}
-    >
-      <div
+    <Box className={styles.flipContainer + " " + hideClass} {...props}>
+      <Box
         className={styles.flipper + (flipped ? " " + styles.flipped : "")}
-        style={{ minHeight: 180 }}
+        onClick={() => {
+          setFlipped((f) => !f);
+        }}
       >
-        <div className={styles.front}>
+        <Box className={styles.front}>
+          <Card
+            shadow="sm"
+            padding="lg"
+            radius="md"
+            withBorder
+            style={{ position: "relative", minHeight: 180 }}
+          >
+            <Text span c="dimmed" size="sm" style={{ position: "absolute", top: 8, left: 12 }}>
+              {formatPartOfSpeech(card.type)}
+            </Text>
+            <Text style={{ textAlign: "center" }} size="xl" mt="xl">
+              {card.english}
+            </Text>
+            {card.englishPlural && (
+              <Text style={{ textAlign: "center" }} size="xl">
+                {card.englishPlural}
+              </Text>
+            )}
+            <Text span c="dimmed" size="sm" style={{ position: "absolute", bottom: 8, right: 12 }}>
+              {card.source}
+            </Text>
+            <Text span c="dimmed" size="sm" style={{ position: "absolute", bottom: 8, left: 12 }}>
+              English
+            </Text>
+          </Card>
+        </Box>
+        <Box className={styles.back}>
           <Card
             shadow="sm"
             padding="lg"
@@ -88,36 +125,9 @@ const FlashCard = ({ card, flipped, ...divProps }: FlashCardProps) => {
               Cymraeg
             </Text>
           </Card>
-        </div>
-        <div className={styles.back}>
-          <Card
-            shadow="sm"
-            padding="lg"
-            radius="md"
-            withBorder
-            style={{ position: "relative", minHeight: 180 }}
-          >
-            <Text span c="dimmed" size="sm" style={{ position: "absolute", top: 8, left: 12 }}>
-              {formatPartOfSpeech(card.type)}
-            </Text>
-            <Text style={{ textAlign: "center" }} size="xl" mt="xl">
-              {card.english}
-            </Text>
-            {card.englishPlural && (
-              <Text style={{ textAlign: "center" }} size="xl">
-                {card.englishPlural}
-              </Text>
-            )}
-            <Text span c="dimmed" size="sm" style={{ position: "absolute", bottom: 8, right: 12 }}>
-              {card.source}
-            </Text>
-            <Text span c="dimmed" size="sm" style={{ position: "absolute", bottom: 8, left: 12 }}>
-              English
-            </Text>
-          </Card>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
