@@ -86,7 +86,7 @@ const Index = () => {
 
   return (
     <Group justify="center" mt="xl">
-      <Stack align="center" maw={380}>
+      <Stack align="center" w="100vw" maw={400} px="sm">
         <Title>Welsh Flashcards</Title>
         <Box w="100%" h={180} pos="relative">
           {[cardIndex - 1, cardIndex, cardIndex + 1].map((idx) => {

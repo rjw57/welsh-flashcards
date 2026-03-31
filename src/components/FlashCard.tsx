@@ -64,8 +64,8 @@ export const FlashCard = ({
     <Box className={styles.flipContainer + " " + hideClass} {...props}>
       <Box className={styles.flipper + (flipped ? " " + styles.flipped : "")}>
         <Box className={styles.front}>
-          <Card shadow="sm" padding="lg" radius="md" withBorder p={0}>
-            <Stack align="stretch" justify="space-between" mih={180} p="xs">
+          <Card shadow="sm" padding="lg" radius="md" withBorder p={0} h="100%">
+            <Stack align="stretch" justify="space-between" p="xs" h="100%">
               <Group justify="space-between">
                 <Text span c="dimmed" size="sm">
                   {formatPartOfSpeech(card.type)}
@@ -87,8 +87,8 @@ export const FlashCard = ({
           </Card>
         </Box>
         <Box className={styles.back}>
-          <Card shadow="sm" padding="lg" radius="md" withBorder p={0}>
-            <Stack align="stretch" justify="space-between" mih={180} p="xs">
+          <Card shadow="sm" padding="lg" radius="md" withBorder p={0} h="100%">
+            <Stack align="stretch" justify="space-between" p="xs" h="100%">
               <Group justify="space-between">
                 <Text span c="dimmed" size="sm">
                   {formatPartOfSpeech(card.type, "cy")}
