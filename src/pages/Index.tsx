@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, Title, Button, Stack, Box, Kbd, Group } from "@mantine/core";
+import { Text, Button, Stack, Box, Kbd, Group } from "@mantine/core";
 import FlashCard from "../components/FlashCard";
 import VOCAB, { PartOfSpeech, getMaxUnit } from "../vocab";
 import OptionsPane from "../components/OptionsPane.tsx";
@@ -43,8 +43,8 @@ const Index = () => {
   const [cardIndex, setCardIndex] = useState(0);
   const [options, setOptions] = useState(DEFAULT_OPTIONS);
   const [optionsUpdated, setOptionsUpdated] = useState(false);
-  const [vocab, setVocab] = useState(() => shuffleInPlace(getFilteredVocab(options)));
-  const [shouldShuffle, setShouldShuffle] = useState(false);
+  const [vocab, setVocab] = useState(() => getFilteredVocab(options));
+  const [shouldShuffle, setShouldShuffle] = useState(true);
   const [startFlipped, setStartFlipped] = useState(false);
 
   if (shouldShuffle) {
@@ -87,8 +87,7 @@ const Index = () => {
   return (
     <Group justify="center" mt="xl">
       <Stack align="center" w="100vw" maw={400} px="sm">
-        <Title>Welsh Flashcards</Title>
-        <Box w="100%" h={180} pos="relative">
+        <Box w="100%" h={200} pos="relative">
           {[cardIndex - 1, cardIndex, cardIndex + 1].map((idx) => {
             if (idx < 0 || idx >= vocab.length) {
               return undefined;
