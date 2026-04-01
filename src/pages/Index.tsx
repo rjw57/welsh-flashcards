@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSwipeable } from "react-swipeable";
 import { Text, Button, Stack, Box, Kbd } from "@mantine/core";
 import FlashCard from "../components/FlashCard";
 import VOCAB, { PartOfSpeech, getMaxUnit } from "../vocab";
@@ -47,11 +48,6 @@ const Index = () => {
   const [shouldShuffle, setShouldShuffle] = useState(true);
   const [startFlipped, setStartFlipped] = useState(false);
 
-  if (shouldShuffle) {
-    setVocab(shuffleInPlace(vocab));
-    setShouldShuffle(false);
-  }
-
   const toggleCard = () => {
     setFlippedCardIdx((idx) => (idx === cardIndex ? null : cardIndex));
   };
@@ -69,6 +65,17 @@ const Index = () => {
     setFlippedCardIdx(null);
   };
 
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: nextCard,
+    onSwipedRight: previousCard,
+    onSwipedUp: cardToBack,
+  });
+
+  if (shouldShuffle) {
+    setVocab(shuffleInPlace(vocab));
+    setShouldShuffle(false);
+  }
+
   useKeydownHandler((event) => {
     if (event.key === "ArrowLeft") {
       previousCard();
@@ -85,7 +92,15 @@ const Index = () => {
   });
 
   return (
-    <Stack align="center" w="100vw" mt="sm" px="sm" style={{ overflow: "hidden" }}>
+    <Stack
+      align="center"
+      w="100vw"
+      mih="100vh"
+      mt="sm"
+      px="sm"
+      style={{ overflow: "hidden" }}
+      {...swipeHandlers}
+    >
       <Box w="100%" maw={380} h={200} pos="relative">
         {[cardIndex - 1, cardIndex, cardIndex + 1].map((idx) => {
           if (idx < 0 || idx >= vocab.length) {
@@ -115,13 +130,6 @@ const Index = () => {
       <Text size="lg">
         {cardIndex + 1} / {vocab.length}
       </Text>
-      <Text ta="center" c="dimmed">
-        Use <Kbd>&larr;</Kbd> and <Kbd>&rarr;</Kbd> to move through deck.
-        <br />
-        Use <Kbd>Space</Kbd> to flip the current card.
-        <br />
-        Use <Kbd>&uarr;</Kbd> to put card to back of deck.
-      </Text>
       <Stack w="100%" maw={380}>
         <OptionsPane
           options={options}
@@ -147,6 +155,11 @@ const Index = () => {
           Apply and shuffle
         </Button>
       </Stack>
+      <Text ta="center" c="dimmed" style={{ textWrap: "balanced" }}>
+        Use <Kbd>&larr;</Kbd> and <Kbd>&rarr;</Kbd> or swipe left and right to move through deck.
+        Use <Kbd>Space</Kbd> or tap on it to flip the current card.
+        Use <Kbd>&uarr;</Kbd> or swipe up to put card to back of deck.
+      </Text>
     </Stack>
   );
 };
