@@ -96,7 +96,7 @@ const Index = () => {
       align="center"
       w="100vw"
       mih="100vh"
-      mt="sm"
+      pt="sm"
       px="sm"
       style={{ overflow: "hidden" }}
       {...swipeHandlers}
