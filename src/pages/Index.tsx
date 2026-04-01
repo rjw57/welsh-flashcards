@@ -155,7 +155,7 @@ const Index = () => {
           Apply and shuffle
         </Button>
       </Stack>
-      <Text ta="center" c="dimmed" style={{ textWrap: "balanced" }}>
+      <Text ta="center" c="dimmed" style={{ textWrap: "balanced" }} maw={380}>
         Use <Kbd>&larr;</Kbd> and <Kbd>&rarr;</Kbd> or swipe left and right to move through deck.
         Use <Kbd>Space</Kbd> or tap on it to flip the current card.
         Use <Kbd>&uarr;</Kbd> or swipe up to put card to back of deck.
