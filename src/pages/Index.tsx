@@ -94,42 +94,14 @@ const Index = () => {
   return (
     <Stack
       align="center"
+      justify="space-between"
       w="100vw"
       mih="100vh"
-      pt="sm"
+      py="sm"
       px="sm"
       style={{ overflow: "hidden" }}
       {...swipeHandlers}
     >
-      <Box w="100%" maw={380} h={200} pos="relative">
-        {[cardIndex - 1, cardIndex, cardIndex + 1].map((idx) => {
-          if (idx < 0 || idx >= vocab.length) {
-            return undefined;
-          }
-          const card = vocab[idx];
-          const hideSide = idx < cardIndex ? "left" : idx > cardIndex ? "right" : "none";
-          return (
-            <FlashCard
-              key={card.key}
-              pos="absolute"
-              left={0}
-              right={0}
-              top={0}
-              bottom={0}
-              card={card}
-              hideSide={hideSide}
-              onClick={toggleCard}
-              flipped={
-                (startFlipped && idx !== flippedCardIdx) ||
-                (!startFlipped && idx === flippedCardIdx)
-              }
-            />
-          );
-        })}
-      </Box>
-      <Text size="lg">
-        {cardIndex + 1} / {vocab.length}
-      </Text>
       <Stack w="100%" maw={380}>
         <OptionsPane
           options={options}
@@ -155,9 +127,42 @@ const Index = () => {
           Apply and shuffle
         </Button>
       </Stack>
+      <Stack w="100%" maw={380} align="center">
+        <Box h={200} w="100%" pos="relative">
+          {[cardIndex - 1, cardIndex, cardIndex + 1].map((idx) => {
+            if (idx < 0 || idx >= vocab.length) {
+              return undefined;
+            }
+            const card = vocab[idx];
+            const hideSide = idx < cardIndex ? "left" : idx > cardIndex ? "right" : "none";
+            return (
+              <FlashCard
+                key={card.key}
+                pos="absolute"
+                left={0}
+                right={0}
+                top={0}
+                bottom={0}
+                card={card}
+                hideSide={hideSide}
+                onClick={toggleCard}
+                flipped={
+                  (startFlipped && idx !== flippedCardIdx) ||
+                  (!startFlipped && idx === flippedCardIdx)
+                }
+              />
+            );
+          })}
+        </Box>
+        <Text size="lg">
+          {cardIndex + 1} / {vocab.length}
+        </Text>
+      </Stack>
       <Text ta="center" c="dimmed" style={{ textWrap: "balanced" }} maw={380}>
         Use <Kbd>&larr;</Kbd> and <Kbd>&rarr;</Kbd> or swipe left and right to move through deck.
+        <br />
         Use <Kbd>Space</Kbd> or tap on it to flip the current card.
+        <br />
         Use <Kbd>&uarr;</Kbd> or swipe up to put card to back of deck.
       </Text>
     </Stack>
